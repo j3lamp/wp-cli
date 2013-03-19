@@ -143,7 +143,14 @@ class Runner {
 		return $prefix == array_slice( $this->arguments, 0, count( $prefix ) );
 	}
 
+	private static function is_wp_loaded() {
+		return function_exists( 'add_filter' );
+	}
+
 	private function _run_command() {
+		if ( isset( $this->assoc_args['man'] ) && !self::is_wp_loaded() )
+			return;  // Wait for it...
+
 		WP_CLI::run_command( $this->arguments, $this->assoc_args );
 	}
 
